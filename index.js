@@ -9,8 +9,6 @@ async function retrieveUrl() {
   // fetch URL variants
   const resp = await fetch('https://cfw-takehome.developers.workers.dev/api/variants');
 
-  if (resp.code == 200) {console.log('success')};
-
   // assign URLs to variant options
   const {variants: [variant1, variant2]} = await resp.json();
 
@@ -23,6 +21,6 @@ async function retrieveUrl() {
 }
 
 async function handleRequest(request) {
-  return new Response(await retrieveUrl(), { status: 200 })
+  return fetch(await retrieveUrl());
 }
 
