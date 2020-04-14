@@ -1,6 +1,6 @@
 name = "beep-boop-bop"
 type = "javascript"
-account_id = ""
+account_id = "04211da1f795a3be0a38d69b593412b7"
 workers_dev = true
 route = ""
 zone_id = ""
