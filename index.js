@@ -24,9 +24,10 @@ async function retrieveUrl() {
 }
 
 async function handleRequest(request) {
-
+  // attempt request
   const resp = await retrieveUrl();
 
+  //check for missing response and handle accordingly
   if (await !resp){
     return new Response('Bad Gateway | Page could not be found :(', {status: 502});
   } else return fetch(await resp);
