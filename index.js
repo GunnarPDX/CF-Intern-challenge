@@ -9,6 +9,9 @@ async function retrieveUrl() {
   // fetch URL variants
   const resp = await fetch('https://cfw-takehome.developers.workers.dev/api/variants');
 
+  // handle API response failures
+  if(!resp.ok) return null;
+
   // assign URLs to variant options
   const {variants: [variant1, variant2]} = await resp.json();
 
@@ -21,6 +24,11 @@ async function retrieveUrl() {
 }
 
 async function handleRequest(request) {
-  return fetch(await retrieveUrl());
+
+  const resp = await retrieveUrl();
+
+  if (await !resp){
+    return new Response('Bad Gateway | Page could not be found :(', {status: 502});
+  } else return fetch(await resp);
 }
 
