@@ -3,7 +3,11 @@
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
-})
+});
+
+function setCookie(userVariant) {
+  document.cookie = userVariant;
+}
 
 async function retrieveUrl() {
   // fetch URL variants
@@ -23,13 +27,25 @@ async function retrieveUrl() {
 
 }
 
-async function handleRequest(request) {
-  // attempt request
-  const resp = await retrieveUrl();
+class ElementHandler {
+  element(element) {
+    //modify elements contents
+    element.setAttribute('href', 'https://gunnarrosenberg.com/');
+    element.setInnerContent('-> Check out my portfolio <-');
+  }
+}
 
-  //check for missing response and handle accordingly
-  if (await !resp){
+const rewriter = new HTMLRewriter().on('a#url', new ElementHandler());
+
+async function handleRequest(request) {
+  const resp = await retrieveUrl();
+  // check for missing response and handle accordingly
+  if (!resp){
     return new Response('Bad Gateway | Page could not be found :(', {status: 502});
-  } else return fetch(await resp);
+  } else {
+    // create and return modified response
+    let res = await fetch(resp);
+    return rewriter.transform(res);
+  }
 }
 
